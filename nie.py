@@ -1,69 +1,66 @@
 from selenium import webdriver
-from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.common.keys import Keys
-
-driver = WebDriver
-
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 nie = "Y8809001S"
 name = "Clinton Leung"
 country = "CANADA"
 expiry = "16/12/2023"
 tel = "658427293"
 email = "clinton0313@gmail.com"
+city = "Barcelona"
+driver = webdriver.Firefox()
 
-#function for the page to select appointment type and continue (skips choosing city)
-def sel_apt_type():
-    driver.get("https://sede.administracionespublicas.gob.es/icpplustieb/citar?p=8&locale=es")
-    select = Select(driver.find_element_by_id("tramiteGrupo[0]"))
-    select.select_by_visible_text("POLICIA-TOMA DE HUELLAS (EXPEDICIÓN DE TARJETA) Y RENOVACIÓN DE TARJETA DE LARGA DURACIÓN")
-    accept = driver.find_element_by_id("btnAceptar")
-    accept.click()
+def click_button(btnid):
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    driver.find_element_by_id(btnid).click()
 
-#click the entrar button on the info page
-def info_page():
-    entrar = Select(driver.find_element_by_id("btnEntrar"))
-    entrar.click()
+def select_option(menu_id, option):
+    select = Select(driver.find_element_by_id(menu_id))
+    select.select_by_visible_text(option)
 
-def fill_info(nie, name, country, expiry):
-    nie_field = driver.find_element_by_id("txtIdCitado")
-    name_field = driver.find_element_by_id("txtDesCitado")
-    country_select = Select(driver.find_element_by_id("txtPaisNac"))
-    expiry_field = driver.find_element_id("txtFecha")
+def fill_field(fld_id, text):
+    field = driver.find_element_by_id(fld_id)
+    field.send_keys(text)
 
-#fill fields
-    nie_field.send_keys(nie)
-    name_field.send_keys(name)
-    expiry_field.send_keys(expiry)
-    country_select.select_by_visible_text(country)
+def start():
+    driver.get("https://sede.administracionespublicas.gob.es/icpplustieb/index/")
 
-#hit accept
-    accept = Select(driver.find_element_by_id("btnEnviar"))
-    accept.click()
+def city_page(city):
+    select_option("form", city)
+    click_button("btnAceptar")
 
-def cita_info(tel, email):
-    tel_field = driver.find_element_by_id("txtTelefonoCitado")
-    email_field = driver.find_element_by_id("emailUNO")
-    emailconfirm_field = driver.find_element_by_id("emailDOS")
-    
-    tel_field.send_keys(tel)
-    email_field.send_keys(email)
-    emailconfirm_field.send_keys(email)
-    
-    siguiente = Select(driver.find_element_by_id("btnSiguiente"))
-    siguiente.click()
-    #check this is how to click
+def appointment_page():
+    tramite_box = driver.find_element_by_id("tramiteGrupo[0]")
+    select = Select(tramite_box)
+    for n in range(12):
+        tramite_box.send_keys(Keys.DOWN)
+    tramite_box.send_keys(Keys.RETURN)
+    click_button("btnAceptar")
+#could make this better
 
-def select_office():
-    office = Select(driver.find_element_by_id("idSede"))
-    siguiente = Select(driver.find_element_by_id("btnSiguiente"))
-    siguiente.click()
+def conditions_page():
+    click_button("btnEntrar")
 
-sel_apt_type
-info_page
-fill_info(nie, name, country, expiry)
-#if statement
-#cita_info(tel, email)
-#select_office
-#alert or restart
+def info_page(nie, name, country, expiry):
+    fill_field("txtIdCitado", nie)
+    fill_field("txtDesCitado", name)
+    select_option("txtPaisNac", country)
+    fill_field("txtFecha", expiry)
+    click_button("btnEnviar")
+
+def sol_cita():
+    click_button("btnEnviar")
+
+def office_page():
+    click_button("btnSiguiente")
+
+def no_cita():
+    click_button("btnSalir")
+
+start()
+city_page(city)
+appointment_page()
+conditions_page()
+info_page(nie, name, country, expiry)
