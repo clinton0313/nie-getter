@@ -108,12 +108,12 @@ try:
         try:
             office_page()
             info_compl(tel, email)
-            try:
-                driver.find_element_by_id("btnSubmit").click()
-            except:
+            if not driver.getPageSource().contains("No hay citas"):
                 os.system('play -nq -t alsa synth 1 sine 440')
                 wait(600)
                 break
+            else:
+                click_button("btnSubmit")
         except:
             no_cita()
 except KeyboardInterrupt:
