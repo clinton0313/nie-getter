@@ -97,9 +97,9 @@ def office():
     office_page()
     info_compl(tel, email)
 
+start()
 try:
     while True:
-        start()
         city_page(city)
         appointment_page()
         conditions_page()
@@ -109,12 +109,12 @@ try:
             office_page()
             info_compl(tel, email)
             try:
-                click_button("btnSubmit")
+                driver.find_element_by_id("btnSubmit").click()
             except:
                 os.system('play -nq -t alsa synth 1 sine 440')
+                wait(600)
                 break
         except:
-            print("no cita!")
             no_cita()
 except KeyboardInterrupt:
     wait(60)
