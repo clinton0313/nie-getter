@@ -15,6 +15,8 @@ email = "clinton0313@gmail.com"
 city = "Barcelona"
 
 #scroll to bottom of page
+def wait(time):
+    WebDriverWait(driver, time)
 def scroll():
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
@@ -67,10 +69,10 @@ def sol_cita():
 
 #Select second office because it could return a single preselcted office or multiple where you have to make a choice
 def office_page():
-    office = driver.find_element_by_id("idSede")
-    select = Select(office)
-    office.send_keys(Keys.DOWN) * 2
-    office.send_keys(Keys.RETURN)
+    try:
+        driver.find_element_by_id("idSede").send_keys(Keys.DOWN)
+    except:
+        pass
     click_button("btnSiguiente")
 
 #if there are no offices to choose from, exit
@@ -84,6 +86,17 @@ def info_compl(tel, email):
     fill_field("emailDOS", email)
     click_button("btnSiguiente")
 
+def run():
+    start()
+    city_page(city)
+    appointment_page()
+    conditions_page()
+    info_page(nie, name, country, expiry)
+    sol_cita()
+def office():
+    office_page()
+    info_compl(tel, email)
+
 try:
     while True:
         start()
@@ -93,17 +106,18 @@ try:
         info_page(nie, name, country, expiry)
         sol_cita()
         try:
-            no_cita()
-        except:
-            info_compl(tel, email)
             office_page()
+            info_compl(tel, email)
             try:
                 click_button("btnSubmit")
             except:
-                os.system('play -nq -t alsa synth 3 sine 440')
+                os.system('play -nq -t alsa synth 1 sine 440')
                 break
+        except:
+            print("no cita!")
+            no_cita()
 except KeyboardInterrupt:
-    pass
+    wait(60)
 
 #error page URL https://sede.administracionespublicas.gob.es/icpplustieb/acOfertarCita
 
