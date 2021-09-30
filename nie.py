@@ -22,7 +22,7 @@ city = os.getenv("CITY", "Barcelona")
 sleep_time_page = int(os.getenv("SLEEP_TIME_PAGE", "5"))
 sleep_time_try = int(os.getenv("SLEEP_TIME_TRY", "60"))
 mode = os.getenv("MODE", "nie")  # { nie, dni, passport} TODO dni?
-appt_type = os.getenv(
+nie_option = os.getenv(
     "APPT_TYPE", "POLICIA-CERTIFICADOS Y ASIGNACION NIE (NO COMUNITARIOS)"
 )
 alert_cli_1 = os.getenv("ALERT_CLI_1", "")
@@ -72,7 +72,7 @@ def city_page(city):
 # choose the correct type of appointment for NIE page
 def appointment_page():
     scroll()
-    select_option("tramiteGrupo[0]", appt_type)
+    select_option("tramiteGrupo[0]", nie_option) #Select apppointment type
     click_button("btnAceptar")
 
 
