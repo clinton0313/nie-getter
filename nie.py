@@ -1,7 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 import time
@@ -22,13 +21,15 @@ email = os.getenv("EMAIL", "")
 city = os.getenv("CITY", "Barcelona")
 sleep_time_page = int(os.getenv("SLEEP_TIME_PAGE", "5"))
 sleep_time_try = int(os.getenv("SLEEP_TIME_TRY", "60"))
-mode = os.getenv("MODE", "nie") # { nie, dni, passport} TODO dni?
-appt_type = os.getenv("APPT_TYPE", "POLICIA-CERTIFICADOS Y ASIGNACION NIE (NO COMUNITARIOS)")
+mode = os.getenv("MODE", "nie")  # { nie, dni, passport} TODO dni?
+appt_type = os.getenv(
+    "APPT_TYPE", "POLICIA-CERTIFICADOS Y ASIGNACION NIE (NO COMUNITARIOS)"
+)
 alert_cli_1 = os.getenv("ALERT_CLI_1", "")
 alert_cli_2 = os.getenv("ALERT_CLI_2", "")
 alert_cli_3 = os.getenv("ALERT_CLI_3", "")
-alert_mode = int(os.getenv("ALERT_MODE", "0")) # set to 1 to enable
-test_mode = int(os.getenv("TEST_MODE", "0")) # set to 1 to force "found" to test
+alert_mode = int(os.getenv("ALERT_MODE", "0"))  # set to 1 to enable
+test_mode = int(os.getenv("TEST_MODE", "0"))  # set to 1 to force "found" to test
 
 # scroll to bottom of page
 def wait(time):
@@ -71,9 +72,7 @@ def city_page(city):
 # choose the correct type of appointment for NIE page
 def appointment_page():
     scroll()
-    select_option(
-        "tramiteGrupo[0]", appt_type
-    )
+    select_option("tramiteGrupo[0]", appt_type)
     click_button("btnAceptar")
 
 
@@ -158,9 +157,9 @@ try:
         time.sleep(sleep_time_page)
         print("info")
 
-        if mode == 'nie':
+        if mode == "nie":
             info_page(nie, name, country, expiry)
-        elif mode == 'passport':
+        elif mode == "passport":
             info_page_passport(passport, name)
         else:
             print("Need to set Mode to nie, passport, etc")
@@ -182,7 +181,7 @@ try:
                     if len(alert_cli_2):
                         os.system(alert_cli_2)
                     if len(alert_cli_3):
-                        os.system(alert_cli_3)                    
+                        os.system(alert_cli_3)
                 break
             # else:
             #     print("click submit [a]")
