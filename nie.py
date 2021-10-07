@@ -124,16 +124,7 @@ def info_compl(tel, email):
     fill_field("emailUNO", email)
     fill_field("emailDOS", email)
     click_button("btnSiguiente")
-
-
-# def run():
-#     start()
-#     city_page(city)
-#     appointment_page()
-#     conditions_page()
-#     # info_page(nie, name, country, expiry)
-#     info_page_passport(passport, name)
-#     sol_cita()
+    
 def office():
     office_page()
     info_compl(tel, email)
@@ -202,12 +193,3 @@ try:
 
 except KeyboardInterrupt:
     wait(60)
-
-# error page URL https://sede.administracionespublicas.gob.es/icpplustieb/acOfertarCita
-
-# office selection page URL is https://sede.administracionespublicas.gob.es/icpplustieb/acCitar
-
-# for the info_compl page URL is https://sede.administracionespublicas.gob.es/icpplustieb/acVerFormulario
-
-# could get generic back page: https://sede.administracionespublicas.gob.es/icpplustieb/infogenerica
-# use click_button("btnSubmit") if so
